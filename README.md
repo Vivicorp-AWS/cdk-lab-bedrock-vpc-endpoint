@@ -58,5 +58,5 @@ aws bedrock-runtime converse --cli-input-json file://payload.json
 ### Clean up
 
 ```bash
-cdk destroy -all
+cdk destroy --all
 ```
