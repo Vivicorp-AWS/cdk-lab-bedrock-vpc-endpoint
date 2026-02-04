@@ -1,0 +1,12 @@
+[project]
+name = "cdk-lab-bedrock-vpc-endpoint"
+version = "0.1.0"
+requires-python = ">=3.13.9"
+dependencies = [
+    "aws-cdk-lib>=2.237.1",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.2",
+]

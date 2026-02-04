@@ -1,0 +1,888 @@
+{
+ "Resources": {
+  "EICEVPC540AA0E7": {
+   "Type": "AWS::EC2::VPC",
+   "Properties": {
+    "CidrBlock": "10.0.0.0/16",
+    "EnableDnsHostnames": true,
+    "EnableDnsSupport": true,
+    "InstanceTenancy": "default",
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "EICEStack/EICEVPC"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "EICEStack/EICEVPC/Resource"
+   }
+  },
+  "EICEVPCprotectedSubnet1Subnet73BA11C1": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": {
+     "Fn::Select": [
+      0,
+      {
+       "Fn::GetAZs": ""
+      }
+     ]
+    },
+    "CidrBlock": "10.0.0.0/24",
+    "MapPublicIpOnLaunch": false,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "protected"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Isolated"
+     },
+     {
+      "Key": "Name",
+      "Value": "EICEStack/EICEVPC/protectedSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "EICEVPC540AA0E7"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EICEStack/EICEVPC/protectedSubnet1/Subnet"
+   }
+  },
+  "EICEVPCprotectedSubnet1RouteTableBCE3FF07": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "EICEStack/EICEVPC/protectedSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "EICEVPC540AA0E7"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EICEStack/EICEVPC/protectedSubnet1/RouteTable"
+   }
+  },
+  "EICEVPCprotectedSubnet1RouteTableAssociation00A85FDA": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "EICEVPCprotectedSubnet1RouteTableBCE3FF07"
+    },
+    "SubnetId": {
+     "Ref": "EICEVPCprotectedSubnet1Subnet73BA11C1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EICEStack/EICEVPC/protectedSubnet1/RouteTableAssociation"
+   }
+  },
+  "EICEVPCprotectedSubnet2Subnet51030B45": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": {
+     "Fn::Select": [
+      1,
+      {
+       "Fn::GetAZs": ""
+      }
+     ]
+    },
+    "CidrBlock": "10.0.1.0/24",
+    "MapPublicIpOnLaunch": false,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "protected"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Isolated"
+     },
+     {
+      "Key": "Name",
+      "Value": "EICEStack/EICEVPC/protectedSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "EICEVPC540AA0E7"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EICEStack/EICEVPC/protectedSubnet2/Subnet"
+   }
+  },
+  "EICEVPCprotectedSubnet2RouteTable43138BA2": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "EICEStack/EICEVPC/protectedSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "EICEVPC540AA0E7"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EICEStack/EICEVPC/protectedSubnet2/RouteTable"
+   }
+  },
+  "EICEVPCprotectedSubnet2RouteTableAssociation203566AE": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "EICEVPCprotectedSubnet2RouteTable43138BA2"
+    },
+    "SubnetId": {
+     "Ref": "EICEVPCprotectedSubnet2Subnet51030B45"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EICEStack/EICEVPC/protectedSubnet2/RouteTableAssociation"
+   }
+  },
+  "EICEVPCRestrictDefaultSecurityGroupCustomResource33AC9B42": {
+   "Type": "Custom::VpcRestrictDefaultSG",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "CustomVpcRestrictDefaultSGCustomResourceProviderHandlerDC833E5E",
+      "Arn"
+     ]
+    },
+    "DefaultSecurityGroupId": {
+     "Fn::GetAtt": [
+      "EICEVPC540AA0E7",
+      "DefaultSecurityGroup"
+     ]
+    },
+    "Account": {
+     "Ref": "AWS::AccountId"
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "EICEStack/EICEVPC/RestrictDefaultSecurityGroupCustomResource/Default"
+   }
+  },
+  "CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Version": "2012-10-17",
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ]
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Sub": "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+     }
+    ],
+    "Policies": [
+     {
+      "PolicyName": "Inline",
+      "PolicyDocument": {
+       "Version": "2012-10-17",
+       "Statement": [
+        {
+         "Effect": "Allow",
+         "Action": [
+          "ec2:AuthorizeSecurityGroupIngress",
+          "ec2:AuthorizeSecurityGroupEgress",
+          "ec2:RevokeSecurityGroupIngress",
+          "ec2:RevokeSecurityGroupEgress"
+         ],
+         "Resource": [
+          {
+           "Fn::Join": [
+            "",
+            [
+             "arn:",
+             {
+              "Ref": "AWS::Partition"
+             },
+             ":ec2:",
+             {
+              "Ref": "AWS::Region"
+             },
+             ":",
+             {
+              "Ref": "AWS::AccountId"
+             },
+             ":security-group/",
+             {
+              "Fn::GetAtt": [
+               "EICEVPC540AA0E7",
+               "DefaultSecurityGroup"
+              ]
+             }
+            ]
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "EICEStack/Custom::VpcRestrictDefaultSGCustomResourceProvider/Role"
+   }
+  },
+  "CustomVpcRestrictDefaultSGCustomResourceProviderHandlerDC833E5E": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "7fa1e366ee8a9ded01fc355f704cff92bfd179574e6f9cfee800a3541df1b200.zip"
+    },
+    "Timeout": 900,
+    "MemorySize": 128,
+    "Handler": "__entrypoint__.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs22.x",
+    "Description": "Lambda function for removing all inbound/outbound rules from the VPC default security group"
+   },
+   "DependsOn": [
+    "CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "EICEStack/Custom::VpcRestrictDefaultSGCustomResourceProvider/Handler",
+    "aws:asset:path": "asset.7fa1e366ee8a9ded01fc355f704cff92bfd179574e6f9cfee800a3541df1b200",
+    "aws:asset:property": "Code"
+   }
+  },
+  "BedrockRuntimeEndpointSecurityGroup3B399BDF": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "EICEStack/BedrockRuntimeEndpoint/SecurityGroup",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "SecurityGroupIngress": [
+     {
+      "CidrIp": {
+       "Fn::GetAtt": [
+        "EICEVPC540AA0E7",
+        "CidrBlock"
+       ]
+      },
+      "Description": {
+       "Fn::Join": [
+        "",
+        [
+         "from ",
+         {
+          "Fn::GetAtt": [
+           "EICEVPC540AA0E7",
+           "CidrBlock"
+          ]
+         },
+         ":443"
+        ]
+       ]
+      },
+      "FromPort": 443,
+      "IpProtocol": "tcp",
+      "ToPort": 443
+     }
+    ],
+    "VpcId": {
+     "Ref": "EICEVPC540AA0E7"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EICEStack/BedrockRuntimeEndpoint/SecurityGroup/Resource"
+   }
+  },
+  "BedrockRuntimeEndpointD9440E01": {
+   "Type": "AWS::EC2::VPCEndpoint",
+   "Properties": {
+    "PrivateDnsEnabled": true,
+    "SecurityGroupIds": [
+     {
+      "Fn::GetAtt": [
+       "BedrockRuntimeEndpointSecurityGroup3B399BDF",
+       "GroupId"
+      ]
+     }
+    ],
+    "ServiceName": {
+     "Fn::Join": [
+      "",
+      [
+       "com.amazonaws.",
+       {
+        "Ref": "AWS::Region"
+       },
+       ".bedrock-runtime"
+      ]
+     ]
+    },
+    "SubnetIds": [
+     {
+      "Ref": "EICEVPCprotectedSubnet1Subnet73BA11C1"
+     },
+     {
+      "Ref": "EICEVPCprotectedSubnet2Subnet51030B45"
+     }
+    ],
+    "VpcEndpointType": "Interface",
+    "VpcId": {
+     "Ref": "EICEVPC540AA0E7"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EICEStack/BedrockRuntimeEndpoint/Resource"
+   }
+  },
+  "EICESecurityGroupCF34C7D7": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "EICEStack/EICESecurityGroup",
+    "VpcId": {
+     "Ref": "EICEVPC540AA0E7"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EICEStack/EICESecurityGroup/Resource"
+   }
+  },
+  "EICESecurityGrouptoEICEStackEC2SecurityGroup42B0C2DF221078081F": {
+   "Type": "AWS::EC2::SecurityGroupEgress",
+   "Properties": {
+    "Description": "to EICEStackEC2SecurityGroup42B0C2DF:22",
+    "DestinationSecurityGroupId": {
+     "Fn::GetAtt": [
+      "EC2SecurityGroup05DEE054",
+      "GroupId"
+     ]
+    },
+    "FromPort": 22,
+    "GroupId": {
+     "Fn::GetAtt": [
+      "EICESecurityGroupCF34C7D7",
+      "GroupId"
+     ]
+    },
+    "IpProtocol": "tcp",
+    "ToPort": 22
+   },
+   "Metadata": {
+    "aws:cdk:path": "EICEStack/EICESecurityGroup/to EICEStackEC2SecurityGroup42B0C2DF:22"
+   }
+  },
+  "EC2SecurityGroup05DEE054": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "EICEStack/EC2SecurityGroup",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "EICEVPC540AA0E7"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EICEStack/EC2SecurityGroup/Resource"
+   }
+  },
+  "EC2SecurityGroupfromEICEStackEICESecurityGroup03E6374D22C19C1C28": {
+   "Type": "AWS::EC2::SecurityGroupIngress",
+   "Properties": {
+    "Description": "from EICEStackEICESecurityGroup03E6374D:22",
+    "FromPort": 22,
+    "GroupId": {
+     "Fn::GetAtt": [
+      "EC2SecurityGroup05DEE054",
+      "GroupId"
+     ]
+    },
+    "IpProtocol": "tcp",
+    "SourceSecurityGroupId": {
+     "Fn::GetAtt": [
+      "EICESecurityGroupCF34C7D7",
+      "GroupId"
+     ]
+    },
+    "ToPort": 22
+   },
+   "Metadata": {
+    "aws:cdk:path": "EICEStack/EC2SecurityGroup/from EICEStackEICESecurityGroup03E6374D:22"
+   }
+  },
+  "BastionRole201D3308": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ec2.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/AmazonBedrockFullAccess"
+       ]
+      ]
+     }
+    ],
+    "RoleName": "BastionRole"
+   },
+   "Metadata": {
+    "aws:cdk:path": "EICEStack/BastionRole/Resource"
+   }
+  },
+  "EICEBastionInstanceProfile6556834E": {
+   "Type": "AWS::IAM::InstanceProfile",
+   "Properties": {
+    "Roles": [
+     {
+      "Ref": "BastionRole201D3308"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "EICEStack/EICEBastion/InstanceProfile"
+   }
+  },
+  "EICEBastion93A2AF4A": {
+   "Type": "AWS::EC2::Instance",
+   "Properties": {
+    "AvailabilityZone": {
+     "Fn::Select": [
+      0,
+      {
+       "Fn::GetAZs": ""
+      }
+     ]
+    },
+    "IamInstanceProfile": {
+     "Ref": "EICEBastionInstanceProfile6556834E"
+    },
+    "ImageId": {
+     "Ref": "SsmParameterValueawsserviceamiamazonlinuxlatestal2023amikernel61x8664C96584B6F00A464EAD1953AFF4B05118Parameter"
+    },
+    "InstanceType": "t3.micro",
+    "SecurityGroupIds": [
+     {
+      "Fn::GetAtt": [
+       "EC2SecurityGroup05DEE054",
+       "GroupId"
+      ]
+     }
+    ],
+    "SubnetId": {
+     "Ref": "EICEVPCprotectedSubnet1Subnet73BA11C1"
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "EICEStack/EICEBastion"
+     }
+    ],
+    "UserData": {
+     "Fn::Base64": "#!/bin/bash"
+    }
+   },
+   "DependsOn": [
+    "BastionRole201D3308"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "EICEStack/EICEBastion/Resource"
+   }
+  },
+  "EC2InstanceConnectionEndpoint": {
+   "Type": "AWS::EC2::InstanceConnectEndpoint",
+   "Properties": {
+    "PreserveClientIp": true,
+    "SecurityGroupIds": [
+     {
+      "Fn::GetAtt": [
+       "EICESecurityGroupCF34C7D7",
+       "GroupId"
+      ]
+     }
+    ],
+    "SubnetId": {
+     "Ref": "EICEVPCprotectedSubnet1Subnet73BA11C1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EICEStack/EC2InstanceConnectionEndpoint"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/3WPQW/CMAyFfwv3kAk4TDuyCk2cFrVTr5MbXGZonSp2QKjqf58KYpXYdrLf5+cne2mXq2e7mMFZ5n53nDdU2b5Q8EcDZ/ns0S9tX3beZDWXLjMu0gkUi1Qx6ginLg9J8QOqBic+sbVI8ARKgc2WFWMNHsvOb3jXBWI1BfoUSS9vMaTumvAISpf9uB/nm31EkV94yze+ZVFgf73srz4LzOj1Hj8Ygtb2ebj9cq93t4uhpgaHweQoIcUxK4mGdpI1/zNyMZxoh/EVBM1aBLVQ2BPvxx0HEVpUjKN4T9olHYy76Ffgp5VdrOzL7CBE85hYqUWb3+o3DmoaxcUBAAA="
+   },
+   "Metadata": {
+    "aws:cdk:path": "EICEStack/CDKMetadata/Default"
+   },
+   "Condition": "CDKMetadataAvailable"
+  }
+ },
+ "Parameters": {
+  "SsmParameterValueawsserviceamiamazonlinuxlatestal2023amikernel61x8664C96584B6F00A464EAD1953AFF4B05118Parameter": {
+   "Type": "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>",
+   "Default": "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-6.1-x86_64"
+  },
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Outputs": {
+  "EC2InstanceID": {
+   "Value": {
+    "Ref": "EICEBastion93A2AF4A"
+   }
+  },
+  "BedrockEndpointID": {
+   "Value": {
+    "Ref": "BedrockRuntimeEndpointD9440E01"
+   }
+  }
+ },
+ "Conditions": {
+  "CDKMetadataAvailable": {
+   "Fn::Or": [
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "af-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-3"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-south-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-3"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-4"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ca-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ca-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-northwest-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-central-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-south-2"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-3"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "il-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "me-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "me-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "sa-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-west-1"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Equals": [
+      {
+       "Ref": "AWS::Region"
+      },
+      "us-west-2"
+     ]
+    }
+   ]
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}
