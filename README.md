@@ -45,7 +45,7 @@ aws ec2-instance-connect ssh \
 # Generate payload file
 cat > payload.json <<EOF
 {
-    "modelId": "us.anthropic.claude-3-5-haiku-20241022-v1:0",
+    "modelId": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
     "messages": [{"role": "user", "content": [{"text": "${1:-Hello}"}]}],
     "inferenceConfig": {"maxTokens": 2048, "temperature": 1.0}
 }
