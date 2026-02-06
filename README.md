@@ -6,6 +6,8 @@ This project demonstrates how to access Amazon Bedrock from an EC2 instance in a
 
 This project extends the existing [cdk-lab-eice](https://github.com/Vivicorp-AWS/cdk-lab-eice) project, which demonstrates EC2 Instance Connect Endpoint (EICE) usage. This version adds Amazon Bedrock integration to show how to use AWS AI services in network-isolated environments.
 
+![](./cdk-lab-eice-and-vpce.jpg)
+
 ## Resources Created
 
 This CDK stack creates the following AWS resources:
